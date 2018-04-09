@@ -1,5 +1,6 @@
 package com.kestrel9.android.capstoneprototype;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -9,13 +10,16 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -98,6 +102,15 @@ public class MainActivity extends AppCompatActivity {
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
 
+        private RecyclerView mRecyclerView;
+
+        private RecyclerView.Adapter mAdapter;
+
+        private RecyclerView.LayoutManager mLayoutManager;
+
+        private ArrayList<MyItem> myItemArrayList = new ArrayList<>();
+
+
         public PlaceholderFragment() {
         }
 
@@ -117,8 +130,22 @@ public class MainActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            TextView textView = rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+//            TextView textView = rootView.findViewById(R.id.section_label);
+////            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+            if (rootView instanceof RecyclerView){
+                Context context = rootView.getContext();
+                mRecyclerView = (RecyclerView) rootView;
+                mRecyclerView.setHasFixedSize(true);
+
+                mLayoutManager = new LinearLayoutManager(context);
+                mRecyclerView.setLayoutManager(mLayoutManager);
+
+                MyItem myItem = new MyItem("text");
+
+
+                mAdapter = new MyListAdapter(myItemArrayList);
+                mRecyclerView.setAdapter(mAdapter);
+            }
             return rootView;
         }
     }
